@@ -1,4 +1,3 @@
-![CI](https://github.com/N0tNic0/PromptGuard.NET/actions/workflows/ci.yml/badge.svg)
 # PromptGuard.NET
 
 PromptGuard is a CLI-first toolkit to version, validate and diff LLM prompts as production-grade assets.
