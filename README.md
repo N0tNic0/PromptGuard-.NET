@@ -74,3 +74,103 @@ PromptGuard is currently in an **early but functional** stage.
 
 Core features (init, validate, diff) are stable and CI-tested.
 Future work will focus on prompt testing and regression detection.
+
+## Getting Started
+
+PromptGuard is a CLI tool to validate, version and compare LLM prompts stored as files.
+You can use it locally in any repository without external dependencies.
+
+## Prerequisites
+
+.NET 10 SDK
+https://dotnet.microsoft.com/download
+
+## Clone the repository
+
+```bash
+git clone https://github.com/<your-username>/PromptGuard.NET.git
+cd PromptGuard.NET
+```
+
+## Initialize PromptGuard
+
+```bash
+dotnet run --project src/PromptGuard.Cli -- init
+```
+
+This will create:
+
+.promtguard/
+└─ config.yaml
+
+prompts/
+└─ _examples/
+   └─ invoice_extraction/
+      └─ 1.0.0.yaml
+
+The _examples folder contains sample prompts for demo and experimentation.
+
+## Validate prompts
+
+Validate all prompts in the prompts directory:
+
+```bash
+dotnet run --project src/PromptGuard.Cli -- validate prompts
+```
+
+Expected output:
+
+```bash
+Validating prompts/_examples/invoice_extraction/1.0.0.yaml
+OK
+```
+
+## Validate prompts
+
+Create a new version of a prompt, for example:
+
+```bash
+prompts/_examples/invoice_extraction/1.1.0.yaml
+```
+
+Then compare versions:
+
+```bash
+dotnet run --project src/PromptGuard.Cli -- diff _examples/invoice_extraction@1.0.0 _examples/invoice_extraction@1.1.0
+```
+
+PromptGuard will show a colorized diff highlighting changes in:
+
+- template
+- parameters
+- policy
+
+## How prompts are organized
+
+PromptGuard expects prompts to be stored as:
+
+prompts/
+└─ <prompt-name>/
+   └─ <version>.yaml
+
+Example:
+
+prompts/
+└─ invoice_extraction/
+   ├─ 1.0.0.yaml
+   └─ 1.1.0.yaml
+
+Prompt references follow the format:
+
+<prompt-name>@<version>
+
+## Examples vs real prompts
+
+prompts/_examples/ → demo and sample prompts (tracked in Git)
+
+prompts/* → your real prompts (recommended to be gitignored)
+
+Recommended .gitignore:
+
+prompts/*
+!prompts/_examples/**
