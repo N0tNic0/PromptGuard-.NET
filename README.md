@@ -1,22 +1,11 @@
-# \# PromptGuard.NET
+![CI](https://github.com/N0tNic0/PromptGuard.NET/actions/workflows/ci.yml/badge.svg)
+# PromptGuard.NET
 
-# 
+PromptGuard is a CLI-first toolkit to version, validate and diff LLM prompts as production-grade assets.
 
-# PromptGuard is a CLI-first toolkit to version, validate and diff LLM prompts as production-grade assets.
+## Example workflow
 
-# 
-
-# \## Example workflow
-
-# 
-
-# ```bash
-
-# pg init
-
-# pg validate prompts
-
-# pg diff invoice.extractor@1.0.0 invoice.extractor@1.1.0
-
-# 
-
+```bash
+pg init
+pg validate prompts
+pg diff invoice.extractor@1.0.0 invoice.extractor@1.1.0
