@@ -133,7 +133,12 @@ public sealed class UiCommand : Command<UiCommand.Settings>
             AnsiConsole.MarkupLine($"[bold]Prompt:[/] {promptName}\n");
 
             var versions = catalog.ListVersions(promptsRoot, promptName).ToList();
-            var menu = new List<string> { "< Back", "Create new version (clone & bump)" };
+            var menu = new List<string>
+            {
+                "< Back",
+                "Create new version (clone & bump)",
+                "Diff two versions"
+            };
             menu.AddRange(versions.Select(v => $"View {v}"));
 
             var choice = AnsiConsole.Prompt(
@@ -151,12 +156,160 @@ public sealed class UiCommand : Command<UiCommand.Settings>
                 continue;
             }
 
+            if (choice == "Diff two versions")
+            {
+                DiffTwoVersions(promptsRoot, promptName, catalog, loader);
+                continue;
+            }
+
             if (choice.StartsWith("View "))
             {
                 var version = choice.Substring("View ".Length).Trim();
                 ViewPromptFile(promptsRoot, promptName, version, catalog);
             }
         }
+    }
+
+    private static void DiffTwoVersions(
+    string promptsRoot,
+    string promptName,
+    PromptCatalog catalog,
+    PromptLoader loader)
+    {
+        var versions = catalog.ListVersions(promptsRoot, promptName).ToList();
+        if (versions.Count < 2)
+        {
+            AnsiConsole.MarkupLine("[yellow]You need at least 2 versions to diff.[/]");
+            Console.ReadKey(true);
+            return;
+        }
+
+        AnsiConsole.Clear();
+        AnsiConsole.MarkupLine($"[bold]Diff[/] {promptName}\n");
+
+        var fromVersion = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title("Select FROM version")
+                .PageSize(15)
+                .AddChoices(versions));
+
+        // evitiamo di scegliere la stessa versione
+        var toCandidates = versions.Where(v => v != fromVersion).ToList();
+
+        var toVersion = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title("Select TO version")
+                .PageSize(15)
+                .AddChoices(toCandidates));
+
+        var fromPath = catalog.GetPromptFilePath(promptsRoot, promptName, fromVersion);
+        var toPath = catalog.GetPromptFilePath(promptsRoot, promptName, toVersion);
+
+        if (!File.Exists(fromPath) || !File.Exists(toPath))
+        {
+            AnsiConsole.MarkupLine("[red]One of the selected versions does not exist on disk.[/]");
+            Console.ReadKey(true);
+            return;
+        }
+
+        var from = loader.LoadFromYamlFile(fromPath);
+        var to = loader.LoadFromYamlFile(toPath);
+
+        // Render diff as markup text (colorized)
+        var diffMarkup = BuildDiffMarkup(from, to);
+
+        AnsiConsole.Clear();
+        AnsiConsole.MarkupLine($"[bold]{promptName}[/]  [grey]{fromVersion} -> {toVersion}[/]\n");
+
+        // Panel + scroll feeling: spezzettiamo in chunk se è lungo
+        AnsiConsole.Write(new Panel(diffMarkup)
+            .Header("DIFF", Justify.Left)
+            .Border(BoxBorder.Rounded)
+            .Expand());
+
+        AnsiConsole.MarkupLine("\n[grey]Press any key to go back...[/]");
+        Console.ReadKey(true);
+    }
+
+    private static string BuildDiffMarkup(PromptDefinition from, PromptDefinition to)
+    {
+        var sb = new System.Text.StringBuilder();
+
+        // TEMPLATE
+        if (from.Template != to.Template)
+        {
+            sb.AppendLine("[underline]Template[/]");
+            AppendLineDiff(sb, from.Template, to.Template);
+            sb.AppendLine();
+        }
+
+        // PARAMETERS
+        if (!Equals(from.Parameters, to.Parameters))
+        {
+            sb.AppendLine("[underline]Parameters[/]");
+            AppendValueDiff(sb, "temperature", from.Parameters.Temperature, to.Parameters.Temperature);
+            AppendValueDiff(sb, "max_tokens", from.Parameters.MaxTokens, to.Parameters.MaxTokens);
+            sb.AppendLine();
+        }
+
+        // POLICY
+        if (!Equals(from.Policy, to.Policy))
+        {
+            sb.AppendLine("[underline]Policy[/]");
+            AppendValueDiff(sb, "require_json", from.Policy.RequireJson, to.Policy.RequireJson);
+            AppendValueDiff(sb, "max_output_tokens", from.Policy.MaxOutputTokens, to.Policy.MaxOutputTokens);
+            AppendListDiff(sb, "forbidden_phrases", from.Policy.ForbiddenPhrases, to.Policy.ForbiddenPhrases);
+            sb.AppendLine();
+        }
+
+        if (sb.Length == 0)
+            sb.AppendLine("[green]No differences.[/]");
+
+        return sb.ToString();
+    }
+
+    private static void AppendLineDiff(System.Text.StringBuilder sb, string a, string b)
+    {
+        var left = a.Split('\n');
+        var right = b.Split('\n');
+        var max = Math.Max(left.Length, right.Length);
+
+        for (int i = 0; i < max; i++)
+        {
+            var l = i < left.Length ? left[i] : null;
+            var r = i < right.Length ? right[i] : null;
+
+            if (l == r) continue;
+
+            if (l != null)
+                sb.AppendLine($"[red]- {Markup.Escape(l)}[/]");
+
+            if (r != null)
+                sb.AppendLine($"[green]+ {Markup.Escape(r)}[/]");
+        }
+    }
+
+    private static void AppendValueDiff<T>(System.Text.StringBuilder sb, string name, T? a, T? b)
+    {
+        if (Equals(a, b)) return;
+
+        if (a is not null)
+            sb.AppendLine($"[red]- {name}: {Markup.Escape(a.ToString()!)}[/]");
+
+        if (b is not null)
+            sb.AppendLine($"[green]+ {name}: {Markup.Escape(b.ToString()!)}[/]");
+    }
+
+    private static void AppendListDiff(System.Text.StringBuilder sb, string name, List<string> a, List<string> b)
+    {
+        var removed = a.Except(b);
+        var added = b.Except(a);
+
+        foreach (var r in removed)
+            sb.AppendLine($"[red]- {name}: {Markup.Escape(r)}[/]");
+
+        foreach (var x in added)
+            sb.AppendLine($"[green]+ {name}: {Markup.Escape(x)}[/]");
     }
 
     private static void ViewPromptFile(string promptsRoot, string promptName, string version, PromptCatalog catalog)
