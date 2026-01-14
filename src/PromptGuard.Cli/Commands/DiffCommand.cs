@@ -29,10 +29,11 @@ public sealed class DiffCommand : Command<DiffCommand.Settings>
             if (fromRef.Name != toRef.Name)
                 throw new InvalidOperationException("Cannot diff prompts with different names.");
 
+            var runtime = PromptGuardRuntime.Discover();
             var resolver = new PromptResolver();
 
-            var from = resolver.Resolve(fromRef);
-            var to = resolver.Resolve(toRef);
+            var from = resolver.Resolve(fromRef, runtime.PromptsRootPath);
+            var to = resolver.Resolve(toRef, runtime.PromptsRootPath);
 
             AnsiConsole.MarkupLine($"[bold]Prompt:[/] {fromRef.Name}\n");
 

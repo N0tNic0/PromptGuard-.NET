@@ -15,13 +15,15 @@ public sealed class InitCommand : Command
             var cwd = Directory.GetCurrentDirectory();
 
             var promptsDir = Path.Combine(cwd, "prompts");
-            var exampleDir = Path.Combine(promptsDir, "invoice.extractor");
+            var examplesRoot = Path.Combine(promptsDir, "_examples");
+            var exampleDir = Path.Combine(examplesRoot, "invoice_extraction");
             var exampleFile = Path.Combine(exampleDir, "1.0.0.yaml");
 
             var toolDir = Path.Combine(cwd, ".promptguard");
             var configFile = Path.Combine(toolDir, "config.yaml");
 
             Directory.CreateDirectory(promptsDir);
+            Directory.CreateDirectory(examplesRoot);
             Directory.CreateDirectory(exampleDir);
             Directory.CreateDirectory(toolDir);
 

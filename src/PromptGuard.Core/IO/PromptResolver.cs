@@ -6,9 +6,9 @@ public sealed class PromptResolver
 {
     private readonly PromptLoader _loader = new();
 
-    public PromptDefinition Resolve(PromptRef reference, string root = "prompts")
+    public PromptDefinition Resolve(PromptRef reference, string promptsRootPath)
     {
-        var path = Path.Combine(root, reference.Name, $"{reference.Version}.yaml");
+        var path = Path.Combine(promptsRootPath, reference.Name, $"{reference.Version}.yaml");
 
         if (!File.Exists(path))
             throw new FileNotFoundException(

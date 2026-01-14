@@ -20,7 +20,10 @@ public sealed class ValidateCommand : Command<ValidateCommand.Settings>
         var loader = new PromptLoader();
         var validator = new PromptValidator();
 
-        var files = ResolveFiles(settings.Path);
+        var runtime = PromptGuardRuntime.Discover();
+        var inputPath = ResolveInputPath(settings.Path, runtime);
+
+        var files = ResolveFiles(inputPath);
 
         if (files.Count == 0)
         {
@@ -61,6 +64,18 @@ public sealed class ValidateCommand : Command<ValidateCommand.Settings>
         }
 
         return anyErrors ? 1 : 0;
+    }
+
+    private static string ResolveInputPath(string input, PromptGuardRuntime runtime)
+    {
+        var normalized = input.Replace('\\', '/').Trim();
+
+        // caso standard: "prompts" -> usa config e root discovery
+        if (normalized is "prompts" or "./prompts")
+            return runtime.PromptsRootPath;
+
+        // altrimenti rispetta il path passato (relativo alla cwd o assoluto)
+        return input;
     }
 
     private static List<string> ResolveFiles(string path)
