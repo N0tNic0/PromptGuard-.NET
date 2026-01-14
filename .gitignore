@@ -383,3 +383,8 @@ Release/
 
 # Rider / VS
 .vs/
+/src/PromptGuard.Cli/obj/Debug/net10.0/PromptGuard.Cli.AssemblyInfo.cs
+/src/PromptGuard.Cli/obj/Debug/net10.0/PromptGuard.Cli.AssemblyInfoInputs.cache
+/src/PromptGuard.Cli/obj/Debug/net10.0/PromptGuard.Cli.assets.cache
+/src/PromptGuard.Cli/obj/Debug/net10.0/PromptGuard.Cli.csproj.AssemblyReference.cache
+/src/PromptGuard.Cli/obj/Debug/net10.0/PromptGuard.Cli.GeneratedMSBuildEditorConfig.editorconfig
