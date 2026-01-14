@@ -1,0 +1,3 @@
+# PromptGuard configuration
+prompts_root: prompts
+tool_dir: .promptguard

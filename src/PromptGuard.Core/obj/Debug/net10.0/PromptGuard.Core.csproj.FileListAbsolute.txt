@@ -1,0 +1,12 @@
+C:\Users\Nico\source\repos\PromptGuard\src\PromptGuard.Core\obj\Debug\net10.0\PromptGuard.Core.csproj.AssemblyReference.cache
+C:\Users\Nico\source\repos\PromptGuard\src\PromptGuard.Core\obj\Debug\net10.0\PromptGuard.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Nico\source\repos\PromptGuard\src\PromptGuard.Core\obj\Debug\net10.0\PromptGuard.Core.AssemblyInfoInputs.cache
+C:\Users\Nico\source\repos\PromptGuard\src\PromptGuard.Core\obj\Debug\net10.0\PromptGuard.Core.AssemblyInfo.cs
+C:\Users\Nico\source\repos\PromptGuard\src\PromptGuard.Core\obj\Debug\net10.0\PromptGuard.Core.csproj.CoreCompileInputs.cache
+C:\Users\Nico\source\repos\PromptGuard\src\PromptGuard.Core\bin\Debug\net10.0\PromptGuard.Core.deps.json
+C:\Users\Nico\source\repos\PromptGuard\src\PromptGuard.Core\bin\Debug\net10.0\PromptGuard.Core.dll
+C:\Users\Nico\source\repos\PromptGuard\src\PromptGuard.Core\bin\Debug\net10.0\PromptGuard.Core.pdb
+C:\Users\Nico\source\repos\PromptGuard\src\PromptGuard.Core\obj\Debug\net10.0\PromptGuard.Core.dll
+C:\Users\Nico\source\repos\PromptGuard\src\PromptGuard.Core\obj\Debug\net10.0\refint\PromptGuard.Core.dll
+C:\Users\Nico\source\repos\PromptGuard\src\PromptGuard.Core\obj\Debug\net10.0\PromptGuard.Core.pdb
+C:\Users\Nico\source\repos\PromptGuard\src\PromptGuard.Core\obj\Debug\net10.0\ref\PromptGuard.Core.dll

@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "/DJEyvs8K5k=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Nico\\source\\repos\\PromptGuard\\src\\PromptGuard.Core\\PromptGuard.Core.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Nico\\.nuget\\packages\\yamldotnet\\16.3.0\\yamldotnet.16.3.0.nupkg.sha512"
+  ],
+  "logs": []
+}
