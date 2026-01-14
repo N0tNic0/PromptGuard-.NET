@@ -20,6 +20,9 @@ app.Configure(config =>
         .WithDescription("Initialize PromptGuard in the current directory")
         .WithExample(new[] { "init" });
 
+    config.AddCommand<UiCommand>("ui")
+        .WithDescription("Interactive terminal UI to manage prompts")
+        .WithExample(new[] { "ui" });
 });
 
 return app.Run(args);

@@ -2,8 +2,8 @@
 
 public sealed class PromptDefinition
 {
-    public string Name { get; init; } = default!;
-    public string Version { get; init; } = default!;
+    public string Name { get; set; } = default!;
+    public string Version { get; set; } = default!;
     public string? Model { get; init; }
 
     public PromptParameters Parameters { get; init; } = new();
