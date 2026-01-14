@@ -75,7 +75,7 @@ PromptGuard is currently in an **early but functional** stage.
 Core features (init, validate, diff) are stable and CI-tested.
 Future work will focus on prompt testing and regression detection.
 
-## Getting Started
+# Getting Started
 
 PromptGuard is a CLI tool to validate, version and compare LLM prompts stored as files.
 You can use it locally in any repository without external dependencies.
@@ -88,7 +88,7 @@ https://dotnet.microsoft.com/download
 ## Clone the repository
 
 ```bash
-git clone https://github.com/<your-username>/PromptGuard.NET.git
+git clone https://github.com/<N0tNic0>/PromptGuard.NET.git
 cd PromptGuard.NET
 ```
 
